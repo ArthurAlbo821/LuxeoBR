@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const steps = [
   {
@@ -34,20 +39,45 @@ const steps = [
 
 export function HowItWorksSection() {
   const [activeStep, setActiveStep] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
+  useGSAP(
+    () => {
+      gsap.from(".hiw-header", {
+        autoAlpha: 0,
+        y: 35,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".hiw-header",
+          start: "top 85%",
+        },
+      });
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+      gsap.from(".hiw-steps", {
+        autoAlpha: 0,
+        x: -40,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".hiw-steps",
+          start: "top 80%",
+        },
+      });
+
+      gsap.from(".hiw-code", {
+        autoAlpha: 0,
+        x: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".hiw-code",
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
 
   // Auto-cycle through steps
   useEffect(() => {
@@ -65,13 +95,9 @@ export function HowItWorksSection() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-20">
+        <div className="hiw-header invisible mb-20">
           <p className="text-sm font-mono text-primary mb-3">// TECHNOLOGY</p>
-          <h2
-            className={`text-3xl lg:text-5xl font-semibold tracking-tight mb-6 transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
             <span className="text-balance">Three steps to</span>
             <br />
             <span className="text-balance">production.</span>
@@ -81,7 +107,7 @@ export function HowItWorksSection() {
         {/* Main content */}
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Steps list */}
-          <div className="space-y-2">
+          <div className="hiw-steps invisible space-y-2">
             {steps.map((step, index) => (
               <button
                 key={step.number}
@@ -112,14 +138,14 @@ export function HowItWorksSection() {
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Progress bar */}
                 {activeStep === index && (
                   <div className="mt-4 ml-8">
                     <div className="h-0.5 bg-border rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-primary rounded-full animate-[progress_4s_linear]"
-                        style={{ width: '100%' }}
+                        style={{ width: "100%" }}
                       />
                     </div>
                   </div>
@@ -129,7 +155,7 @@ export function HowItWorksSection() {
           </div>
 
           {/* Code display */}
-          <div className="lg:sticky lg:top-32">
+          <div className="hiw-code invisible lg:sticky lg:top-32">
             <div className="rounded-xl overflow-hidden bg-card border border-border card-shadow">
               {/* Window chrome */}
               <div className="px-4 py-3 border-b border-border flex items-center gap-3 bg-secondary/30">
@@ -144,17 +170,19 @@ export function HowItWorksSection() {
               {/* Code content */}
               <div className="p-6 font-mono text-sm min-h-[200px]">
                 <pre className="text-muted-foreground">
-                  {steps[activeStep].code.split('\n').map((line, i) => (
-                    <div 
-                      key={`${activeStep}-${i}`} 
+                  {steps[activeStep].code.split("\n").map((line, i) => (
+                    <div
+                      key={`${activeStep}-${i}`}
                       className="leading-relaxed animate-in fade-in slide-in-from-left-2"
                       style={{ animationDelay: `${i * 50}ms` }}
                     >
-                      <span className="text-muted-foreground/40 select-none w-6 inline-block">{i + 1}</span>
-                      <span 
-                        dangerouslySetInnerHTML={{ 
-                          __html: highlightCode(line) 
-                        }} 
+                      <span className="text-muted-foreground/40 select-none w-6 inline-block">
+                        {i + 1}
+                      </span>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: highlightCode(line),
+                        }}
                       />
                     </div>
                   ))}
@@ -169,17 +197,18 @@ export function HowItWorksSection() {
                 </div>
               </div>
             </div>
-
-            {/* ASCII decoration */}
-            
           </div>
         </div>
       </div>
 
       <style jsx>{`
         @keyframes progress {
-          from { width: 0%; }
-          to { width: 100%; }
+          from {
+            width: 0%;
+          }
+          to {
+            width: 100%;
+          }
         }
       `}</style>
     </section>

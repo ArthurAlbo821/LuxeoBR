@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { AsciiDna } from "./ascii-dna";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const regions = [
   { name: "North America", nodes: 5, latency: "< 20ms" },
@@ -13,20 +18,52 @@ const regions = [
 ];
 
 export function InfrastructureSection() {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
+  useGSAP(
+    () => {
+      // Left content slides in from left
+      gsap.from(".infra-left", {
+        autoAlpha: 0,
+        x: -50,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".infra-left",
+          start: "top 80%",
+        },
+      });
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+      // Right content slides in from right
+      gsap.from(".infra-right", {
+        autoAlpha: 0,
+        x: 50,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".infra-right",
+          start: "top 80%",
+        },
+      });
+
+      // Stagger region cards
+      ScrollTrigger.batch(".infra-region", {
+        onEnter: (elements) => {
+          gsap.from(elements, {
+            autoAlpha: 0,
+            y: 30,
+            x: 20,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: "power2.out",
+          });
+        },
+        start: "top 90%",
+        once: true,
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section ref={sectionRef} className="relative py-32 bg-muted/30 overflow-hidden">
@@ -38,17 +75,13 @@ export function InfrastructureSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
-          <div
-            className={`transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
-          >
+          <div className="infra-left invisible">
             <p className="text-sm font-mono text-primary mb-4">// GLOBAL INFRASTRUCTURE</p>
             <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
               Built for planetary scale.
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Deploy your AI models across our global edge network. Automatic failover, 
+              Deploy your AI models across our global edge network. Automatic failover,
               intelligent routing, and sub-100ms latency anywhere in the world.
             </p>
 
@@ -84,17 +117,12 @@ export function InfrastructureSection() {
           </div>
 
           {/* Right: Regions Grid */}
-          <div
-            className={`transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
-            }`}
-          >
+          <div className="infra-right invisible">
             <div className="grid grid-cols-1 gap-3">
-              {regions.map((region, index) => (
+              {regions.map((region) => (
                 <div
                   key={region.name}
-                  className="group relative bg-card rounded-lg p-5 border border-border card-shadow hover:border-primary/50 transition-all duration-300"
-                  style={{ transitionDelay: `${index * 50}ms` }}
+                  className="infra-region group relative bg-card rounded-lg p-5 border border-border card-shadow hover:border-primary/50 transition-all duration-300"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold">{region.name}</h4>
@@ -114,7 +142,7 @@ export function InfrastructureSection() {
                       {region.nodes} {region.nodes === 1 ? "node" : "nodes"}
                     </span>
                   </div>
-                  
+
                   {/* Animated ASCII Network Visualization */}
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-30 transition-opacity font-mono text-xs text-primary">
                     <pre>{`

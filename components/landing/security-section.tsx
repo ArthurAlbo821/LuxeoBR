@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { AsciiTorus } from "./ascii-torus";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const securityFeatures = [
   {
@@ -9,39 +14,39 @@ const securityFeatures = [
     description: "AES-256 encryption for data at rest and in transit",
     ascii: `  ╔═══╗
   ║ ◈ ║
-  ╚═══╝`
+  ╚═══╝`,
   },
   {
     title: "Zero Trust Architecture",
     description: "Every request is authenticated and authorized",
     ascii: `  ┌───┐
   │ ✓ │
-  └───┘`
+  └───┘`,
   },
   {
     title: "SOC 2 Type II",
     description: "Independently audited security controls",
     ascii: `  ╭───╮
   │ ★ │
-  ╰───╯`
+  ╰───╯`,
   },
   {
     title: "GDPR Compliant",
     description: "Full compliance with data protection regulations",
     ascii: `  [===]
-  [===]`
+  [===]`,
   },
   {
     title: "Role-Based Access",
     description: "Granular permissions for team members",
     ascii: `  ◉─◉─◉
-  │ │ │`
+  │ │ │`,
   },
   {
     title: "Audit Logs",
     description: "Complete visibility into all system activities",
     ascii: `  ▪ ▪ ▪
-  ▪ ▪ ▪`
+  ▪ ▪ ▪`,
   },
 ];
 
@@ -53,20 +58,63 @@ const certifications = [
 ];
 
 export function SecuritySection() {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
+  useGSAP(
+    () => {
+      // Header
+      gsap.from(".security-header", {
+        autoAlpha: 0,
+        y: 40,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".security-header",
+          start: "top 85%",
+        },
+      });
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+      // Batch security cards
+      ScrollTrigger.batch(".security-card", {
+        onEnter: (elements) => {
+          gsap.from(elements, {
+            autoAlpha: 0,
+            y: 40,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power2.out",
+          });
+        },
+        start: "top 88%",
+        once: true,
+      });
+
+      // Certifications bar
+      gsap.from(".security-certs", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".security-certs",
+          start: "top 90%",
+        },
+      });
+
+      // Bug bounty notice
+      gsap.from(".security-notice", {
+        autoAlpha: 0,
+        y: 25,
+        duration: 0.7,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".security-notice",
+          start: "top 92%",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section ref={sectionRef} className="relative py-32 bg-muted/30 overflow-hidden">
@@ -77,30 +125,23 @@ export function SecuritySection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div
-          className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="security-header invisible text-center max-w-3xl mx-auto mb-16">
           <p className="text-sm font-mono text-primary mb-4">// ENTERPRISE SECURITY</p>
           <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
             Security you can trust.
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Bank-level security with enterprise-grade compliance. Your data is protected 
-            by industry-leading encryption and access controls.
+            Bank-level security with enterprise-grade compliance. Your data is protected by
+            industry-leading encryption and access controls.
           </p>
         </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {securityFeatures.map((feature, index) => (
+          {securityFeatures.map((feature) => (
             <div
               key={feature.title}
-              className={`bg-card rounded-xl p-6 border border-border card-shadow transition-all duration-500 hover:border-primary/50 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${index * 50}ms` }}
+              className="security-card bg-card rounded-xl p-6 border border-border card-shadow hover:border-primary/50 transition-all duration-500"
             >
               {/* ASCII Icon */}
               <pre className="font-mono text-sm text-primary mb-4 leading-tight h-12 flex items-center">
@@ -114,11 +155,7 @@ export function SecuritySection() {
         </div>
 
         {/* Certifications Bar */}
-        <div
-          className={`rounded-xl bg-card border border-border card-shadow p-8 transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="security-certs invisible rounded-xl bg-card border border-border card-shadow p-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="font-semibold text-lg mb-2">Certified & Compliant</h3>
@@ -142,19 +179,17 @@ export function SecuritySection() {
         </div>
 
         {/* Security Notice */}
-        <div
-          className={`mt-8 p-6 rounded-xl bg-foreground/5 border border-primary/20 transition-all duration-700 delay-400 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="security-notice invisible mt-8 p-6 rounded-xl bg-foreground/5 border border-primary/20">
           <div className="flex items-start gap-4">
             <pre className="font-mono text-2xl text-primary mt-1">🔒</pre>
             <div>
               <h4 className="font-semibold mb-2">Bug Bounty Program</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We work with security researchers worldwide to identify and fix vulnerabilities. 
-                Report security issues and get rewarded. 
-                <a href="#" className="text-primary hover:underline ml-1">Learn more →</a>
+                We work with security researchers worldwide to identify and fix vulnerabilities.
+                Report security issues and get rewarded.
+                <a href="#" className="text-primary hover:underline ml-1">
+                  Learn more &rarr;
+                </a>
               </p>
             </div>
           </div>

@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { AsciiDna } from "./ascii-dna";
+import { useState, useRef } from "react";
 import { Copy, Check } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const codeExamples = [
   {
@@ -39,27 +43,28 @@ console.log('Batch ID:', batch.id)`,
 ];
 
 const features = [
-  { 
-    title: "TypeScript-first", 
-    description: "Full type safety with auto-generated types for all API responses."
+  {
+    title: "TypeScript-first",
+    description: "Full type safety with auto-generated types for all API responses.",
   },
-  { 
-    title: "Streaming built-in", 
-    description: "Native support for streaming responses with async iterators."
+  {
+    title: "Streaming built-in",
+    description: "Native support for streaming responses with async iterators.",
   },
-  { 
-    title: "Edge-ready", 
-    description: "Works in Node.js, Deno, Bun, and edge runtimes out of the box."
+  {
+    title: "Edge-ready",
+    description: "Works in Node.js, Deno, Bun, and edge runtimes out of the box.",
   },
-  { 
-    title: "Zero dependencies", 
-    description: "Lightweight SDK with no external dependencies. Just 12KB gzipped."
+  {
+    title: "Zero dependencies",
+    description: "Lightweight SDK with no external dependencies. Just 12KB gzipped.",
   },
 ];
 
 export function DevelopersSection() {
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(codeExamples[activeTab].code);
@@ -67,25 +72,68 @@ export function DevelopersSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  useGSAP(
+    () => {
+      gsap.from(".dev-left", {
+        autoAlpha: 0,
+        x: -40,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".dev-left",
+          start: "top 80%",
+        },
+      });
+
+      gsap.from(".dev-feature", {
+        autoAlpha: 0,
+        x: -25,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".dev-features",
+          start: "top 85%",
+        },
+      });
+
+      gsap.from(".dev-code", {
+        autoAlpha: 0,
+        x: 40,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".dev-code",
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section id="developers" className="relative py-32 overflow-hidden">
+    <section id="developers" ref={sectionRef} className="relative py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left: Content */}
           <div>
-            <p className="text-sm font-mono text-primary mb-3">// FOR DEVELOPERS</p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
-              Built for developers,<br />by developers.
-            </h2>
-            <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              A thoughtfully designed SDK that gets out of your way. 
-              Ship faster with intuitive APIs and comprehensive documentation.
-            </p>
-            
+            <div className="dev-left invisible">
+              <p className="text-sm font-mono text-primary mb-3">// FOR DEVELOPERS</p>
+              <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
+                Built for developers,
+                <br />
+                by developers.
+              </h2>
+              <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
+                A thoughtfully designed SDK that gets out of your way. Ship faster with intuitive
+                APIs and comprehensive documentation.
+              </p>
+            </div>
+
             {/* Features list */}
-            <div className="grid gap-6">
+            <div className="dev-features grid gap-6">
               {features.map((feature) => (
-                <div key={feature.title} className="flex gap-4">
+                <div key={feature.title} className="dev-feature invisible flex gap-4">
                   <div className="w-1 bg-primary/30 rounded-full shrink-0" />
                   <div>
                     <h3 className="font-medium mb-1">{feature.title}</h3>
@@ -94,13 +142,10 @@ export function DevelopersSection() {
                 </div>
               ))}
             </div>
-            
-            {/* ASCII DNA decoration */}
-            
           </div>
-          
+
           {/* Right: Code block */}
-          <div className="lg:sticky lg:top-32">
+          <div className="dev-code invisible lg:sticky lg:top-32">
             <div className="rounded-xl overflow-hidden bg-card border border-border card-shadow">
               {/* Tabs */}
               <div className="flex items-center gap-1 p-2 border-b border-border bg-secondary/30">
@@ -132,25 +177,27 @@ export function DevelopersSection() {
                   )}
                 </button>
               </div>
-              
+
               {/* Code content */}
               <div className="p-6 font-mono text-sm overflow-x-auto">
                 <pre className="text-muted-foreground">
                   <code>
-                    {codeExamples[activeTab].code.split('\n').map((line, i) => (
+                    {codeExamples[activeTab].code.split("\n").map((line, i) => (
                       <div key={i} className="leading-relaxed">
-                        <span className="text-muted-foreground/40 select-none w-8 inline-block">{i + 1}</span>
-                        <span 
-                          dangerouslySetInnerHTML={{ 
-                            __html: highlightSyntax(line) 
-                          }} 
+                        <span className="text-muted-foreground/40 select-none w-8 inline-block">
+                          {i + 1}
+                        </span>
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: highlightSyntax(line),
+                          }}
                         />
                       </div>
                     ))}
                   </code>
                 </pre>
               </div>
-              
+
               {/* Terminal output */}
               <div className="border-t border-border p-4 bg-secondary/20">
                 <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-2">
@@ -162,7 +209,7 @@ export function DevelopersSection() {
                 </div>
               </div>
             </div>
-            
+
             {/* Docs link */}
             <div className="mt-6 flex items-center gap-4 text-sm">
               <a href="#" className="text-primary hover:underline font-mono">

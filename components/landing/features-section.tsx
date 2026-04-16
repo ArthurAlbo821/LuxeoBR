@@ -2,6 +2,11 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { AsciiCube } from "./ascii-cube";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 // Animated ASCII generators
 const asciiAnimations = {
@@ -132,18 +137,18 @@ const features = [
 
 function AnimatedAscii({ animationKey }: { animationKey: keyof typeof asciiAnimations }) {
   const [frame, setFrame] = useState(0);
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setFrame((f) => f + 1);
     }, 400);
     return () => clearInterval(interval);
   }, []);
-  
+
   const getAscii = useCallback(() => {
     return asciiAnimations[animationKey](frame);
   }, [animationKey, frame]);
-  
+
   return (
     <pre className="font-mono text-xs text-primary leading-tight whitespace-pre">
       {getAscii()}
@@ -153,34 +158,11 @@ function AnimatedAscii({ animationKey }: { animationKey: keyof typeof asciiAnima
 
 function FeatureCard({
   feature,
-  index,
 }: {
   feature: (typeof features)[0];
-  index: number;
 }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.2 }
-    );
-
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={cardRef}
-      className={`group relative rounded-xl p-8 card-shadow transition-all duration-700 hover:border-primary/50 bg-transparent border-0 border-none border-transparent ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
+    <div className="feature-card group relative rounded-xl p-8 card-shadow hover:border-primary/50 bg-transparent border-0 border-none border-transparent">
       {/* Animated ASCII Icon */}
       <div className="mb-6 h-20 flex items-center">
         <AnimatedAscii animationKey={feature.animationKey} />
@@ -196,20 +178,51 @@ function FeatureCard({
 }
 
 export function FeaturesSection() {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
+  useGSAP(
+    () => {
+      // Animate the header
+      gsap.from(".features-header-title", {
+        autoAlpha: 0,
+        y: 40,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".features-header-title",
+          start: "top 85%",
+        },
+      });
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+      gsap.from(".features-header-desc", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.8,
+        delay: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".features-header-desc",
+          start: "top 85%",
+        },
+      });
+
+      // Batch animate feature cards with stagger
+      ScrollTrigger.batch(".feature-card", {
+        onEnter: (elements) => {
+          gsap.from(elements, {
+            autoAlpha: 0,
+            y: 50,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power3.out",
+          });
+        },
+        start: "top 88%",
+        once: true,
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section
@@ -222,25 +235,17 @@ export function FeaturesSection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
             <p className="text-sm font-mono text-primary mb-3">// PLATFORM</p>
-            <h2
-              className={`text-3xl lg:text-5xl font-semibold tracking-tight mb-6 transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-            >
+            <h2 className="features-header-title invisible text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
               <span className="text-balance">Everything you need</span>
               <br />
               <span className="text-balance">to build at scale.</span>
             </h2>
-            <p
-              className={`text-lg text-muted-foreground leading-relaxed max-w-lg transition-all duration-700 delay-100 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-            >
-              A complete platform for building, deploying, and scaling AI applications. 
+            <p className="features-header-desc invisible text-lg text-muted-foreground leading-relaxed max-w-lg">
+              A complete platform for building, deploying, and scaling AI applications.
               From prototype to production in minutes, not months.
             </p>
           </div>
-          
+
           {/* ASCII Cube visualization */}
           <div className="flex justify-center lg:justify-end">
             <AsciiCube className="w-[480px] h-[640px]" />
@@ -249,8 +254,8 @@ export function FeaturesSection() {
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((feature, index) => (
-            <FeatureCard key={feature.title} feature={feature} index={index} />
+          {features.map((feature) => (
+            <FeatureCard key={feature.title} feature={feature} />
           ))}
         </div>
       </div>

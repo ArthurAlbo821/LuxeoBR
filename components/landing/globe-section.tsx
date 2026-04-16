@@ -1,12 +1,17 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Globe } from "@/components/ui/cobe-globe"
+import { useRef } from "react";
+import { Globe } from "@/components/ui/cobe-globe";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const markers = [
   { id: "saopaulo", location: [-23.5505, -46.6333] as [number, number], label: "São Paulo" },
   { id: "geneve", location: [46.2044, 6.1432] as [number, number], label: "Genève" },
-]
+];
 
 const arcs = [
   {
@@ -15,7 +20,7 @@ const arcs = [
     to: [46.2044, 6.1432] as [number, number],
     label: "GRU → GVA",
   },
-]
+];
 
 const features = [
   {
@@ -33,18 +38,87 @@ const features = [
     description:
       "Elastic resource provisioning adapts to your traffic patterns dynamically without manual devops.",
   },
-]
+];
 
 export function GlobeSection() {
-  const [isVisible, setIsVisible] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100)
-    return () => clearTimeout(timer)
-  }, [])
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+        },
+      });
+
+      tl.from(".globe-badge", {
+        autoAlpha: 0,
+        y: 25,
+        duration: 0.7,
+      })
+        .from(
+          ".globe-heading",
+          {
+            autoAlpha: 0,
+            y: 40,
+            duration: 0.9,
+          },
+          "-=0.4"
+        )
+        .from(
+          ".globe-subtitle",
+          {
+            autoAlpha: 0,
+            y: 30,
+            duration: 0.7,
+          },
+          "-=0.5"
+        )
+        .from(
+          ".globe-feature",
+          {
+            autoAlpha: 0,
+            x: -30,
+            duration: 0.7,
+            stagger: 0.15,
+          },
+          "-=0.3"
+        );
+
+      // Globe appears with scale + fade from right
+      gsap.from(".globe-visual", {
+        autoAlpha: 0,
+        scale: 0.85,
+        duration: 1.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".globe-visual",
+          start: "top 80%",
+        },
+      });
+
+      // Parallax on globe on scroll
+      gsap.to(".globe-visual", {
+        y: -40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section className="relative w-full border-t border-border/30 overflow-hidden py-20 md:py-32 lg:py-40">
+    <section
+      ref={sectionRef}
+      className="relative w-full border-t border-border/30 overflow-hidden py-20 md:py-32 lg:py-40"
+    >
       {/* Dot grid background */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -63,11 +137,7 @@ export function GlobeSection() {
         {/* Left column: Content */}
         <div className="flex-1 w-full flex flex-col items-start min-w-[300px]">
           {/* Badge */}
-          <div
-            className={`flex items-center gap-3 mb-6 bg-white/[0.03] border border-white/[0.08] rounded-full pl-2 pr-4 py-1.5 backdrop-blur-sm transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <div className="globe-badge invisible flex items-center gap-3 mb-6 bg-white/[0.03] border border-white/[0.08] rounded-full pl-2 pr-4 py-1.5 backdrop-blur-sm">
             <span className="relative flex h-2 w-2 ml-1">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary shadow-[0_0_8px_var(--primary)]" />
@@ -79,9 +149,7 @@ export function GlobeSection() {
 
           {/* Heading */}
           <h2
-            className={`text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.1] mb-6 tracking-tight transition-all duration-700 delay-100 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className="globe-heading invisible text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.1] mb-6 tracking-tight"
             style={{ fontFamily: "var(--font-geist-pixel-line), monospace" }}
           >
             <span className="block text-foreground/90">Deploy anywhere.</span>
@@ -91,24 +159,16 @@ export function GlobeSection() {
           </h2>
 
           {/* Subtitle */}
-          <p
-            className={`text-muted-foreground text-base sm:text-lg leading-relaxed max-w-xl mb-12 font-light transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <p className="globe-subtitle invisible text-muted-foreground text-base sm:text-lg leading-relaxed max-w-xl mb-12 font-light">
             Our infrastructure spans across continents, ensuring low-latency access and maximum
             uptime for your{" "}
             <span className="text-foreground/80 font-normal">agentic applications</span> worldwide.
           </p>
 
           {/* Features */}
-          <div
-            className={`flex flex-col gap-8 w-full max-w-lg mt-2 relative before:absolute before:left-[27px] before:top-4 before:bottom-4 before:w-px before:bg-gradient-to-b before:from-white/10 before:via-white/5 before:to-transparent transition-all duration-700 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <div className="flex flex-col gap-8 w-full max-w-lg mt-2 relative before:absolute before:left-[27px] before:top-4 before:bottom-4 before:w-px before:bg-gradient-to-b before:from-white/10 before:via-white/5 before:to-transparent">
             {features.map((feature) => (
-              <div key={feature.title} className="flex gap-6 items-start group cursor-default">
+              <div key={feature.title} className="globe-feature invisible flex gap-6 items-start group cursor-default">
                 <div className="relative z-10 w-14 h-14 rounded-xl bg-[#14161b] border border-white/10 shadow-[inset_0_1px_rgba(255,255,255,0.05)] flex items-center justify-center group-hover:border-primary/40 group-hover:bg-primary/5 transition-colors duration-500 overflow-hidden shrink-0">
                   <div className="absolute inset-x-0 -bottom-full h-full bg-gradient-to-t from-primary/20 to-transparent group-hover:bottom-0 transition-all duration-500 ease-out" />
                   <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
@@ -127,11 +187,7 @@ export function GlobeSection() {
         </div>
 
         {/* Right column: Globe */}
-        <div
-          className={`flex-1 w-full max-w-[500px] lg:max-w-none lg:w-[500px] relative flex items-center justify-center mt-8 lg:mt-0 transition-all duration-1000 delay-200 ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
-        >
+        <div className="globe-visual invisible flex-1 w-full max-w-[500px] lg:max-w-none lg:w-[500px] relative flex items-center justify-center mt-8 lg:mt-0">
           {/* Orbital ring decoration */}
           <div className="absolute inset-0 rounded-full border border-white/[0.04] flex items-center justify-center -rotate-12 pointer-events-none">
             <div className="w-[85%] h-[85%] rounded-full border border-dashed border-white/[0.08] animate-[spin_60s_linear_infinite]" />
@@ -154,5 +210,5 @@ export function GlobeSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
