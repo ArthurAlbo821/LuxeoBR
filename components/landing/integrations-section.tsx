@@ -10,54 +10,55 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const integrations = [
   {
-    name: "Slack",
-    category: "Communication",
+    name: "Next.js",
+    category: "Framework",
+    ascii: `  ▲
+  ─`,
+  },
+  {
+    name: "Supabase",
+    category: "Backend",
+    ascii: `  [█]
+  [█]`,
+  },
+  {
+    name: "OpenAI",
+    category: "AI",
+    ascii: `  ◈◈
+  ◈◈`,
+  },
+  {
+    name: "Linear",
+    category: "Gestão",
     ascii: `  ┌─┐
-  │#│
+  │→│
   └─┘`,
   },
   {
+    name: "Figma",
+    category: "Design",
+    ascii: `  ╔═╗
+  ║◇║
+  ╚═╝`,
+  },
+  {
     name: "GitHub",
-    category: "Development",
+    category: "Código",
     ascii: `  ╔═╗
   ║<║
   ╚═╝`,
   },
   {
-    name: "Stripe",
-    category: "Payments",
-    ascii: `  ┌$┐
-  └─┘`,
-  },
-  {
-    name: "PostgreSQL",
-    category: "Database",
-    ascii: `  [█]
-  [█]`,
-  },
-  {
-    name: "Redis",
-    category: "Cache",
-    ascii: `  ◈◈
-  ◈◈`,
-  },
-  {
-    name: "AWS",
-    category: "Cloud",
+    name: "Vercel",
+    category: "Deploy",
     ascii: `  ≋≋
   ≋≋`,
   },
   {
-    name: "MongoDB",
-    category: "Database",
-    ascii: `  {M}
-  ---`,
-  },
-  {
-    name: "Vercel",
-    category: "Hosting",
-    ascii: `  ▲
-  ─`,
+    name: "Stripe",
+    category: "Pagamentos",
+    ascii: `  ┌$┐
+  └─┘`,
   },
 ];
 
@@ -117,15 +118,15 @@ export function IntegrationsSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="integrations-header invisible text-center max-w-3xl mx-auto mb-16">
-          <p className="text-sm font-mono text-primary mb-4">// INTEGRATION ECOSYSTEM</p>
+          <p className="text-sm font-mono text-primary mb-4">// ECOSSISTEMA</p>
           <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
-            Connect everything.
+            Ferramentas que usamos.
             <br />
-            Build anything.
+            Resultados que entregamos.
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Pre-built integrations with your favorite tools. No complex setup, just plug and play
-            with our extensive API library.
+            Nosso stack não é só código. É o ecossistema completo que acelera
+            cada fase do produto.
           </p>
         </div>
 
@@ -160,30 +161,34 @@ export function IntegrationsSection() {
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl lg:text-3xl font-semibold mb-4">
-                  Need a custom integration?
+                  Quer construir algo junto?
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  Our REST and GraphQL APIs make it easy to build custom integrations. Plus, get
-                  access to webhooks for real-time events.
+                  Aplicamos o mesmo stack e rigor dos nossos produtos internos
+                  em projetos selecionados de product engineering.
                 </p>
-                <button className="px-6 py-3 bg-foreground text-background rounded-lg font-medium hover:bg-foreground/90 transition-colors">
-                  View API Docs
-                </button>
+                <a href="#contato" className="px-6 py-3 bg-foreground text-background rounded-lg font-medium hover:bg-foreground/90 transition-colors inline-block">
+                  Fale com a gente
+                </a>
               </div>
 
               <div className="font-mono text-xs text-muted-foreground space-y-2 bg-background/50 rounded-lg p-6 border border-border">
-                <div className="text-primary mb-2">// Example: Send notification</div>
+                <div className="text-primary mb-2">// Início de todo projeto</div>
                 <div>
-                  <span className="text-purple-400">const</span> response ={" "}
-                  <span className="text-blue-400">await</span> nexus.send({"{"}
+                  <span className="text-purple-400">const</span> projeto ={" "}
+                  <span className="text-blue-400">await</span> luxeo.start({"{"}
                 </div>
                 <div className="pl-4">
-                  <span className="text-green-400">channel</span>:{" "}
-                  <span className="text-yellow-400">&quot;#general&quot;</span>,
+                  <span className="text-green-400">tipo</span>:{" "}
+                  <span className="text-yellow-400">&apos;product-engineering&apos;</span>,
                 </div>
                 <div className="pl-4">
-                  <span className="text-green-400">message</span>:{" "}
-                  <span className="text-yellow-400">&quot;AI inference complete&quot;</span>
+                  <span className="text-green-400">stack</span>:{" "}
+                  <span className="text-yellow-400">&apos;custom&apos;</span>,
+                </div>
+                <div className="pl-4">
+                  <span className="text-green-400">prazo</span>:{" "}
+                  <span className="text-yellow-400">&apos;agressivo&apos;</span>
                 </div>
                 <div>{"}"});</div>
               </div>

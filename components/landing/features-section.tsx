@@ -104,33 +104,33 @@ const asciiAnimations = {
 
 const features = [
   {
-    title: "Neural Processing",
-    description: "Advanced deep learning models that understand context and adapt to your specific business needs.",
+    title: "Incubação de Produtos",
+    description: "Identificamos oportunidades, validamos hipóteses e construímos MVPs com rigor técnico e visão de negócio.",
     animationKey: "neural" as const,
   },
   {
-    title: "Smart Workflows",
-    description: "Visual workflow builder with drag-and-drop simplicity. Chain AI actions to create powerful automations.",
+    title: "Engenharia de Produto",
+    description: "Design, desenvolvimento e deploy. Stack moderna, código limpo, entrega contínua. Do protótipo à produção.",
     animationKey: "workflow" as const,
   },
   {
-    title: "Enterprise Security",
-    description: "SOC 2 Type II certified with end-to-end encryption. Your data never leaves your control.",
-    animationKey: "security" as const,
-  },
-  {
-    title: "Real-time Analytics",
-    description: "Live dashboards and instant insights. Monitor performance and optimize workflows on the fly.",
+    title: "Operação & Escala",
+    description: "Infraestrutura, monitoramento e otimização. Operamos os produtos que construímos com ownership real.",
     animationKey: "analytics" as const,
   },
   {
-    title: "Global Scale",
-    description: "Distributed infrastructure across 12 regions. Sub-100ms latency worldwide.",
+    title: "Estruturação de Times",
+    description: "Montamos squads dedicados com a combinação certa de skills para cada produto. Recrutamento, cultura e processos.",
     animationKey: "globe" as const,
   },
   {
-    title: "API First",
-    description: "RESTful and GraphQL APIs with comprehensive SDKs. Integrate Nexus into any stack.",
+    title: "AI & Data",
+    description: "Inteligência artificial e dados integrados desde o dia zero. Não como feature, mas como fundação.",
+    animationKey: "security" as const,
+  },
+  {
+    title: "Product Engineering Externo",
+    description: "Para clientes selecionados, aplicamos o mesmo rigor dos nossos produtos internos nos seus projetos.",
     animationKey: "api" as const,
   },
 ];
@@ -156,11 +156,7 @@ function AnimatedAscii({ animationKey }: { animationKey: keyof typeof asciiAnima
   );
 }
 
-function FeatureCard({
-  feature,
-}: {
-  feature: (typeof features)[0];
-}) {
+function FeatureCard({ feature }: { feature: (typeof features)[0] }) {
   return (
     <div className="feature-card group relative rounded-xl p-8 card-shadow hover:border-primary/50 bg-transparent border-0 border-none border-transparent">
       {/* Animated ASCII Icon */}
@@ -226,7 +222,7 @@ export function FeaturesSection() {
 
   return (
     <section
-      id="features"
+      id="studio"
       ref={sectionRef}
       className="relative py-32 overflow-hidden"
     >
@@ -234,15 +230,15 @@ export function FeaturesSection() {
         {/* Header with ASCII cube */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
-            <p className="text-sm font-mono text-primary mb-3">// PLATFORM</p>
+            <p className="text-sm font-mono text-primary mb-3">// STUDIO</p>
             <h2 className="features-header-title invisible text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
-              <span className="text-balance">Everything you need</span>
+              <span className="text-balance">Tudo que você precisa</span>
               <br />
-              <span className="text-balance">to build at scale.</span>
+              <span className="text-balance">para lançar um produto.</span>
             </h2>
             <p className="features-header-desc invisible text-lg text-muted-foreground leading-relaxed max-w-lg">
-              A complete platform for building, deploying, and scaling AI applications.
-              From prototype to production in minutes, not months.
+              Do conceito à operação. Combinamos estratégia de produto, engenharia de software
+              e operação para transformar ideias em negócios reais.
             </p>
           </div>
 

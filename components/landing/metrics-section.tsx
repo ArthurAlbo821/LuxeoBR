@@ -8,88 +8,38 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-function AnimatedCounter({
-  end,
-  suffix = "",
-  prefix = "",
-}: {
-  end: number;
-  suffix?: string;
-  prefix?: string;
-}) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      const counter = { val: 0 };
-      ScrollTrigger.create({
-        trigger: ref.current,
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-          if (hasAnimated) return;
-          setHasAnimated(true);
-          gsap.to(counter, {
-            val: end,
-            duration: 2,
-            ease: "power2.out",
-            onUpdate: () => {
-              setCount(Math.floor(counter.val));
-            },
-          });
-        },
-      });
-    },
-    { scope: ref, dependencies: [end, hasAnimated] }
-  );
-
-  return (
-    <div ref={ref} className="font-mono text-4xl lg:text-6xl font-semibold tracking-tight">
-      {prefix}
-      {count.toLocaleString()}
-      {suffix}
-    </div>
-  );
-}
-
-const metrics = [
+const visionMetrics = [
   {
-    value: 309890,
-    suffix: "",
-    label: "API calls today",
-    sublabel: "+12.4% from yesterday",
+    value: "2026",
+    label: "Primeiro produto próprio",
+    sublabel: "Em desenvolvimento",
   },
   {
-    value: 99,
-    suffix: ".98%",
-    label: "Uptime this month",
-    sublabel: "SLA guaranteed",
+    value: "3",
+    label: "Produtos no pipeline",
+    sublabel: "SaaS B2B + AI",
   },
   {
-    value: 47,
-    suffix: "ms",
-    label: "Average latency",
-    sublabel: "p99 globally",
+    value: "CH + BR",
+    label: "Operação bi-continental",
+    sublabel: "Genebra + São Paulo",
   },
   {
-    value: 184,
-    suffix: "",
-    label: "Countries served",
-    sublabel: "Edge network",
+    value: "∞",
+    label: "Ideias por validar",
+    sublabel: "O pipeline não para",
   },
 ];
 
-export function MetricsSection() {
-  const [time, setTime] = useState(new Date());
-  const sectionRef = useRef<HTMLDivElement>(null);
+const roadmapEntries = [
+  { time: "now", event: "Produto #1 em desenvolvimento", region: "SP", status: "WIP" },
+  { time: "Q2", event: "Lançamento MVP interno", region: "CH", status: "PLAN" },
+  { time: "Q3", event: "Product engineering — cliente #1", region: "SP+CH", status: "NEXT" },
+  { time: "Q4", event: "Expansão do time de engenharia", region: "BR", status: "PLAN" },
+];
 
-  useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+export function MetricsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -136,7 +86,7 @@ export function MetricsSection() {
   );
 
   return (
-    <section id="metrics" ref={sectionRef} className="relative py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative py-32 overflow-hidden">
       {/* ASCII Wave Background */}
       <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
         <AsciiWave className="w-full h-full object-cover" />
@@ -144,32 +94,26 @@ export function MetricsSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="metrics-header invisible flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16">
-          <div>
-            <p className="text-sm font-mono text-primary mb-3">// LIVE METRICS</p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-balance">
-              Real-time infrastructure
-              <br />
-              performance.
-            </h2>
-          </div>
-          <div className="flex items-center gap-3 font-mono text-sm text-muted-foreground">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span>All systems operational</span>
-            <span className="text-border">|</span>
-            <span>{time.toLocaleTimeString()}</span>
-          </div>
+        <div className="metrics-header invisible mb-16">
+          <p className="text-sm font-mono text-primary mb-3">// VISÃO</p>
+          <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-balance">
+            O que estamos construindo.
+            <br />
+            E para onde vamos.
+          </h2>
         </div>
 
-        {/* Metrics Grid */}
+        {/* Vision Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-xl overflow-hidden card-shadow">
-          {metrics.map((metric) => (
-            <div key={metric.label} className="metric-card bg-card p-8 flex flex-col gap-4">
+          {visionMetrics.map((metric) => (
+            <div
+              key={metric.label}
+              className="metric-card bg-card p-8 flex flex-col gap-4"
+            >
               <div className="text-primary">
-                <AnimatedCounter
-                  end={typeof metric.value === "number" ? metric.value : 0}
-                  suffix={metric.suffix}
-                />
+                <div className="font-mono text-4xl lg:text-6xl font-semibold tracking-tight">
+                  {metric.value}
+                </div>
               </div>
               <div>
                 <div className="text-foreground font-medium">{metric.label}</div>
@@ -179,70 +123,28 @@ export function MetricsSection() {
           ))}
         </div>
 
-        {/* Live Activity Feed */}
+        {/* Roadmap Feed */}
         <div className="metrics-feed invisible mt-12 p-6 rounded-xl bg-card border border-border card-shadow">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-sm text-muted-foreground">Live activity feed</span>
+            <span className="font-mono text-sm text-muted-foreground">// log de atividade</span>
           </div>
-          <div className="font-mono text-xs space-y-2 text-muted-foreground overflow-hidden h-24">
-            <ActivityLine
-              time="now"
-              event="POST /api/v2/inference"
-              region="us-east-1"
-              status="200"
-              latency="23ms"
-            />
-            <ActivityLine
-              time="1s"
-              event="GET /api/v2/models"
-              region="eu-west-1"
-              status="200"
-              latency="18ms"
-            />
-            <ActivityLine
-              time="2s"
-              event="POST /api/v2/inference"
-              region="ap-south-1"
-              status="200"
-              latency="45ms"
-            />
-            <ActivityLine
-              time="3s"
-              event="POST /api/v2/batch"
-              region="us-west-2"
-              status="202"
-              latency="12ms"
-            />
+          <div className="font-mono text-xs space-y-2 text-muted-foreground overflow-hidden">
+            {roadmapEntries.map((entry) => (
+              <div key={entry.event} className="flex items-center gap-4 animate-in slide-in-from-bottom-2 duration-500">
+                <span className="text-muted-foreground/50 w-8">{entry.time}</span>
+                <span className="text-foreground">{entry.event}</span>
+                <span className="text-muted-foreground/50">{entry.region}</span>
+                <span className={
+                  entry.status === "WIP" ? "text-green-500" :
+                  entry.status === "PLAN" ? "text-yellow-500" :
+                  "text-primary"
+                }>{entry.status}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function ActivityLine({
-  time,
-  event,
-  region,
-  status,
-  latency,
-}: {
-  time: string;
-  event: string;
-  region: string;
-  status: string;
-  latency: string;
-}) {
-  return (
-    <div className="flex items-center gap-4 animate-in slide-in-from-bottom-2 duration-500">
-      <span className="text-muted-foreground/50 w-8">{time}</span>
-      <span className="text-foreground">{event}</span>
-      <span className="text-muted-foreground/50">{region}</span>
-      <span className={status.startsWith("2") ? "text-green-500" : "text-yellow-500"}>
-        {status}
-      </span>
-      <span className="text-primary">{latency}</span>
-    </div>
   );
 }

@@ -1,31 +1,23 @@
 "use client";
 
 import { Github, Twitter } from "lucide-react";
-import { Terminal } from "lucide-react";
 
 const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "Technology", href: "#how-it-works" },
-    { name: "Metrics", href: "#metrics" },
-    { name: "Changelog", href: "#" },
+  Studio: [
+    { name: "Capabilities", href: "#studio" },
+    { name: "Método", href: "#metodo" },
+    { name: "Stack", href: "#stack" },
+    { name: "Por que nós", href: "#porque" },
   ],
-  Developers: [
-    { name: "Documentation", href: "#" },
-    { name: "API Reference", href: "#" },
-    { name: "SDK", href: "#developers" },
-    { name: "Status", href: "#" },
-  ],
-  Company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Contact", href: "#" },
+  Empresa: [
+    { name: "Sobre", href: "#" },
+    { name: "Genebra", href: "#" },
+    { name: "São Paulo", href: "#" },
+    { name: "Contato", href: "#contato" },
   ],
   Legal: [
-    { name: "Privacy", href: "#" },
-    { name: "Terms", href: "#" },
-    { name: "Security", href: "#" },
+    { name: "Privacidade", href: "#" },
+    { name: "Termos", href: "#" },
   ],
 };
 
@@ -35,19 +27,19 @@ export function FooterSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Main Footer */}
         <div className="py-16">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             {/* Brand Column */}
             <div className="col-span-2">
               {/* Logo */}
               <a href="#" className="flex items-center gap-2 mb-6">
                 <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <Terminal className="w-4 h-4 text-primary" />
+                  <span className="font-mono text-primary font-bold text-sm">L</span>
                 </div>
-                <span className="font-semibold text-lg tracking-tight">nexus</span>
+                <span className="font-semibold text-lg tracking-tight">Luxeo Labs</span>
               </a>
 
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                The complete platform to build, deploy, and scale AI-powered applications.
+                Venture studio. Engenharia de produto. Genebra + São Paulo.
               </p>
 
               {/* Social Links */}
@@ -93,7 +85,7 @@ export function FooterSection() {
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            2025 Nexus. All rights reserved.
+            2026 Luxeo Labs. Todos os direitos reservados.
           </p>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">

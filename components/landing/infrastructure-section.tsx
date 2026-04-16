@@ -8,13 +8,13 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const regions = [
-  { name: "North America", nodes: 5, latency: "< 20ms" },
-  { name: "Europe", nodes: 4, latency: "< 25ms" },
-  { name: "Asia Pacific", nodes: 3, latency: "< 30ms" },
-  { name: "South America", nodes: 2, latency: "< 40ms" },
-  { name: "Middle East", nodes: 2, latency: "< 35ms" },
-  { name: "Africa", nodes: 1, latency: "< 50ms" },
+const stackItems = [
+  { name: "Frontend", tech: "Next.js, React, Tailwind", detail: "SSR + Edge" },
+  { name: "Backend", tech: "Node.js, Python, Go", detail: "APIs + Microservices" },
+  { name: "AI / ML", tech: "OpenAI, LangChain, Vercel AI", detail: "LLMs + Embeddings" },
+  { name: "Database", tech: "PostgreSQL, Redis, Supabase", detail: "SQL + Cache" },
+  { name: "Infra", tech: "Vercel, AWS, Docker", detail: "Cloud Native" },
+  { name: "Ferramentas", tech: "GitHub, Linear, Figma", detail: "Dev + Design" },
 ];
 
 export function InfrastructureSection() {
@@ -66,7 +66,7 @@ export function InfrastructureSection() {
   );
 
   return (
-    <section ref={sectionRef} className="relative py-32 bg-muted/30 overflow-hidden">
+    <section ref={sectionRef} id="stack" className="relative py-32 bg-muted/30 overflow-hidden">
       {/* ASCII DNA Background */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
         <AsciiDna className="w-[600px] h-[500px]" />
@@ -76,81 +76,60 @@ export function InfrastructureSection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
           <div className="infra-left invisible">
-            <p className="text-sm font-mono text-primary mb-4">// GLOBAL INFRASTRUCTURE</p>
+            <p className="text-sm font-mono text-primary mb-4">// COMO CONSTRUÍMOS</p>
             <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight mb-6 text-balance">
-              Built for planetary scale.
+              Stack de quem constrói a sério.
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Deploy your AI models across our global edge network. Automatic failover,
-              intelligent routing, and sub-100ms latency anywhere in the world.
+              Escolhemos as ferramentas certas para cada produto. Tecnologia moderna,
+              battle-tested, que escala.
             </p>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <pre className="font-mono text-2xl text-primary">⚡</pre>
                 <div>
-                  <h3 className="font-semibold mb-1">Lightning Fast CDN</h3>
+                  <h3 className="font-semibold mb-1">Entrega Contínua</h3>
                   <p className="text-sm text-muted-foreground">
-                    Edge caching and smart routing for optimal performance
+                    CI/CD automatizado, preview deploys, zero downtime
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <pre className="font-mono text-2xl text-primary">🔄</pre>
+                <pre className="font-mono text-2xl text-primary">🧠</pre>
                 <div>
-                  <h3 className="font-semibold mb-1">Auto-Scaling</h3>
+                  <h3 className="font-semibold mb-1">AI-First</h3>
                   <p className="text-sm text-muted-foreground">
-                    Handle traffic spikes with zero configuration
+                    LLMs, embeddings e pipelines de dados integrados desde o dia 1
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <pre className="font-mono text-2xl text-primary">🛡️</pre>
+                <pre className="font-mono text-2xl text-primary">📐</pre>
                 <div>
-                  <h3 className="font-semibold mb-1">DDoS Protection</h3>
+                  <h3 className="font-semibold mb-1">Qualidade de Código</h3>
                   <p className="text-sm text-muted-foreground">
-                    Built-in protection against malicious traffic
+                    TypeScript strict, testes automatizados, code review rigoroso
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right: Regions Grid */}
+          {/* Right: Stack Grid */}
           <div className="infra-right invisible">
             <div className="grid grid-cols-1 gap-3">
-              {regions.map((region) => (
+              {stackItems.map((item) => (
                 <div
-                  key={region.name}
+                  key={item.name}
                   className="infra-region group relative bg-card rounded-lg p-5 border border-border card-shadow hover:border-primary/50 transition-all duration-300"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold">{region.name}</h4>
-                    <span className="font-mono text-xs text-primary">{region.latency}</span>
+                    <h4 className="font-semibold">{item.name}</h4>
+                    <span className="font-mono text-xs text-primary">{item.detail}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      {Array.from({ length: region.nodes }).map((_, i) => (
-                        <span
-                          key={i}
-                          className="w-2 h-2 rounded-full bg-primary/70 animate-pulse"
-                          style={{ animationDelay: `${i * 200}ms` }}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {region.nodes} {region.nodes === 1 ? "node" : "nodes"}
-                    </span>
-                  </div>
-
-                  {/* Animated ASCII Network Visualization */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-30 transition-opacity font-mono text-xs text-primary">
-                    <pre>{`
-  ┌───┐
-  │ ◉ │
-  └─┬─┘
-    │
-`}</pre>
+                  <div className="text-sm text-muted-foreground font-mono">
+                    {item.tech}
                   </div>
                 </div>
               ))}
@@ -160,16 +139,16 @@ export function InfrastructureSection() {
             <div className="mt-8 p-6 rounded-lg bg-foreground/5 border border-border">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="font-mono text-2xl font-semibold text-primary">17</div>
-                  <div className="text-xs text-muted-foreground">Data Centers</div>
+                  <div className="font-mono text-2xl font-semibold text-primary">12+</div>
+                  <div className="text-xs text-muted-foreground">Tecnologias</div>
                 </div>
                 <div>
-                  <div className="font-mono text-2xl font-semibold text-primary">99.99%</div>
-                  <div className="text-xs text-muted-foreground">Uptime SLA</div>
+                  <div className="font-mono text-2xl font-semibold text-primary">100%</div>
+                  <div className="text-xs text-muted-foreground">TypeScript</div>
                 </div>
                 <div>
-                  <div className="font-mono text-2xl font-semibold text-primary">1.2B</div>
-                  <div className="text-xs text-muted-foreground">Requests/day</div>
+                  <div className="font-mono text-2xl font-semibold text-primary">CI/CD</div>
+                  <div className="text-xs text-muted-foreground">Em todo projeto</div>
                 </div>
               </div>
             </div>

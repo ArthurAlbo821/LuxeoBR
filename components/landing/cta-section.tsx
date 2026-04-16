@@ -80,7 +80,7 @@ export function CtaSection() {
   );
 
   return (
-    <section ref={sectionRef} className="relative py-32 overflow-hidden">
+    <section ref={sectionRef} id="contato" className="relative py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="cta-card relative rounded-2xl overflow-hidden">
           {/* Background with grid */}
@@ -96,12 +96,12 @@ export function CtaSection() {
             <div className="flex items-center justify-between gap-8">
               <div className="max-w-2xl">
                 <h2 className="cta-title invisible text-3xl lg:text-5xl font-semibold tracking-tight mb-6 text-background text-balance">
-                  Start building the future, today.
+                  Vamos construir algo juntos.
                 </h2>
 
                 <p className="cta-desc invisible text-lg text-background/70 mb-8 leading-relaxed max-w-lg">
-                  Join thousands of teams shipping faster with Nexus. Free to start, scales with
-                  you.
+                  Tem uma ideia, um produto para lançar, ou precisa de um time de engenharia?
+                  Bora conversar.
                 </p>
 
                 <div className="cta-buttons invisible flex flex-col sm:flex-row items-start gap-4">
@@ -109,7 +109,7 @@ export function CtaSection() {
                     size="lg"
                     className="bg-background hover:bg-background/90 text-foreground px-6 h-12 text-sm font-medium group"
                   >
-                    Get started free
+                    Agendar uma call
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5" />
                   </Button>
                   <Button
@@ -117,12 +117,12 @@ export function CtaSection() {
                     variant="outline"
                     className="h-12 px-6 text-sm font-medium border-background/30 text-background hover:bg-background/10 bg-transparent"
                   >
-                    Talk to sales
+                    Mande um email
                   </Button>
                 </div>
 
                 <p className="text-sm text-background/50 mt-6 font-mono">
-                  No credit card required
+                  luxeo@labs ~ $ ready_
                 </p>
               </div>
 

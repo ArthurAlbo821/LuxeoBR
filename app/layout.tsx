@@ -16,9 +16,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Nexus AI - Intelligent Automation Platform',
-  description: 'Transform your workflow with AI-powered automation. Nexus AI brings cutting-edge machine learning to your fingertips.',
-  generator: 'v0.app',
+  title: 'Luxeo Labs — Da ideia ao produto. Rápido.',
+  description: 'Venture studio e engenharia de produto. Incubamos, construímos e operamos produtos digitais com velocidade de startup. Genebra + São Paulo.',
   icons: {
     icon: [
       {
@@ -44,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="pt-BR" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${GeistPixelLine.variable} font-sans antialiased`}>
         {children}
         <Analytics />

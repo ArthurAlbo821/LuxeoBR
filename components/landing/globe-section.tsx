@@ -24,19 +24,19 @@ const arcs = [
 
 const features = [
   {
-    title: "Edge Computing",
+    title: "Genebra, Suíça",
     description:
-      "Distribute intelligent workloads closer to users. Sub-20ms inference latency across 300+ global PoPs.",
+      "Base estratégica e operacional. Proximidade com o ecossistema europeu de startups e investidores.",
   },
   {
-    title: "99.99% Uptime",
+    title: "São Paulo, Brasil",
     description:
-      "Self-healing clusters and automated multi-region failover guarantee enterprise-grade resilience.",
+      "Centro de engenharia. Time técnico dedicado construindo produtos com as melhores práticas do mercado.",
   },
   {
-    title: "Auto-scaling",
+    title: "Operação Integrada",
     description:
-      "Elastic resource provisioning adapts to your traffic patterns dynamically without manual devops.",
+      "Processos assíncronos, sprints coordenados e deploy contínuo. Timezone difference as a feature, not a bug.",
   },
 ];
 
@@ -143,7 +143,7 @@ export function GlobeSection() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary shadow-[0_0_8px_var(--primary)]" />
             </span>
             <span className="font-mono text-[10px] sm:text-xs font-bold tracking-[0.2em] text-primary uppercase pt-0.5">
-              Global Infrastructure
+              PRESENÇA GLOBAL
             </span>
           </div>
 
@@ -152,17 +152,16 @@ export function GlobeSection() {
             className="globe-heading invisible text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.1] mb-6 tracking-tight"
             style={{ fontFamily: "var(--font-geist-pixel-line), monospace" }}
           >
-            <span className="block text-foreground/90">Deploy anywhere.</span>
+            <span className="block text-foreground/90">Genebra + São Paulo.</span>
             <span className="block bg-gradient-to-r from-foreground to-foreground/40 bg-clip-text text-transparent">
-              Scale everywhere.
+              Um studio, dois fusos.
             </span>
           </h2>
 
           {/* Subtitle */}
           <p className="globe-subtitle invisible text-muted-foreground text-base sm:text-lg leading-relaxed max-w-xl mb-12 font-light">
-            Our infrastructure spans across continents, ensuring low-latency access and maximum
-            uptime for your{" "}
-            <span className="text-foreground/80 font-normal">agentic applications</span> worldwide.
+            Estratégia e operação na Suíça. Engenharia e desenvolvimento no Brasil.{" "}
+            <span className="text-foreground/80 font-normal">A combinação perfeita entre rigor europeu e velocidade brasileira.</span>
           </p>
 
           {/* Features */}

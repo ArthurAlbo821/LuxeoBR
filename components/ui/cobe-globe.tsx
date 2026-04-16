@@ -124,7 +124,7 @@ export function Globe({
     let globe: ReturnType<typeof createGlobe> | null = null
     let animationId: number
 
-    let phi = 0
+    let time = 0
 
     function init() {
       const width = canvas.offsetWidth
@@ -163,7 +163,7 @@ export function Globe({
 
       function animate() {
         if (!isPausedRef.current) {
-          phi += speed
+          time += speed
           if (
             Math.abs(velocity.current.phi) > 0.0001 ||
             Math.abs(velocity.current.theta) > 0.0001
@@ -182,7 +182,7 @@ export function Globe({
           }
         }
         globe!.update({
-          phi: phi + phiOffsetRef.current + dragOffset.current.phi,
+          phi: Math.sin(time) * Math.PI * 0.5 + phiOffsetRef.current + dragOffset.current.phi,
           theta: theta + thetaOffsetRef.current + dragOffset.current.theta,
           dark,
           mapBrightness,

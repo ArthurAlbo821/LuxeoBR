@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Search, Target, Palette, Code, Rocket, TrendingUp } from "lucide-react";
+import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -10,32 +12,100 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const steps = [
   {
     number: "01",
-    title: "Connect",
-    description: "Integrate with 200+ data sources. One-click setup for databases, APIs, and cloud services.",
-    code: `nexus.connect({
-  source: 'postgresql',
-  config: process.env.DB_URL
-})`,
+    title: "Descoberta",
+    description:
+      "Entendemos o problema, mapeamos o mercado e definimos o escopo mínimo viável. Sem documentos de 50 páginas — um plano claro e executável.",
   },
   {
     number: "02",
-    title: "Configure",
-    description: "Define your AI workflows with our visual builder or code-first approach.",
-    code: `nexus.workflow('process-orders', {
-  trigger: 'new_order',
-  steps: ['validate', 'enrich', 'notify']
-})`,
+    title: "Construção",
+    description:
+      "Sprints curtos, entregas contínuas. Design, código e testes integrados. Você acompanha cada commit, cada deploy.",
   },
   {
     number: "03",
-    title: "Deploy",
-    description: "Ship to production instantly. Auto-scaling, monitoring, and 99.9% uptime included.",
-    code: `nexus.deploy({
-  env: 'production',
-  region: 'auto'
-}) // Live in < 30s`,
+    title: "Lançamento",
+    description:
+      "Go-to-market com produto real. Monitoramento, iteração rápida e operação contínua. Não entregamos e sumimos.",
   },
 ];
+
+const timelineNodes = [
+  {
+    id: 1,
+    title: "Research",
+    date: "Semana 1-2",
+    content:
+      "Análise de mercado, entrevistas com usuários, estudo de concorrência.",
+    category: "Descoberta",
+    icon: Search,
+    relatedIds: [2],
+    status: "completed" as const,
+    energy: 100,
+  },
+  {
+    id: 2,
+    title: "Validação",
+    date: "Semana 2-3",
+    content: "Testes de hipótese, prototipagem rápida, feedback loop.",
+    category: "Descoberta",
+    icon: Target,
+    relatedIds: [1, 3],
+    status: "completed" as const,
+    energy: 85,
+  },
+  {
+    id: 3,
+    title: "Design",
+    date: "Semana 3-5",
+    content: "UI/UX design, sistema de design, arquitetura técnica.",
+    category: "Construção",
+    icon: Palette,
+    relatedIds: [2, 4],
+    status: "in-progress" as const,
+    energy: 70,
+  },
+  {
+    id: 4,
+    title: "Dev",
+    date: "Semana 5-10",
+    content:
+      "Sprints semanais, CI/CD, code review, testes automatizados.",
+    category: "Construção",
+    icon: Code,
+    relatedIds: [3, 5],
+    status: "in-progress" as const,
+    energy: 55,
+  },
+  {
+    id: 5,
+    title: "Launch",
+    date: "Semana 10-11",
+    content: "Deploy produção, monitoramento, go-to-market.",
+    category: "Lançamento",
+    icon: Rocket,
+    relatedIds: [4, 6],
+    status: "pending" as const,
+    energy: 30,
+  },
+  {
+    id: 6,
+    title: "Escala",
+    date: "Semana 12+",
+    content: "Otimização, growth, iteração baseada em dados.",
+    category: "Lançamento",
+    icon: TrendingUp,
+    relatedIds: [5],
+    status: "pending" as const,
+    energy: 15,
+  },
+];
+
+const stepToNodes: Record<number, number[]> = {
+  0: [1, 2],
+  1: [3, 4],
+  2: [5, 6],
+};
 
 export function HowItWorksSection() {
   const [activeStep, setActiveStep] = useState(0);
@@ -65,13 +135,13 @@ export function HowItWorksSection() {
         },
       });
 
-      gsap.from(".hiw-code", {
+      gsap.from(".hiw-orbital", {
         autoAlpha: 0,
-        x: 40,
-        duration: 0.8,
-        ease: "power3.out",
+        scale: 0.85,
+        duration: 1,
+        ease: "power2.out",
         scrollTrigger: {
-          trigger: ".hiw-code",
+          trigger: ".hiw-orbital",
           start: "top 80%",
         },
       });
@@ -89,18 +159,18 @@ export function HowItWorksSection() {
 
   return (
     <section
-      id="how-it-works"
+      id="metodo"
       ref={sectionRef}
       className="relative py-32 overflow-hidden bg-secondary/30"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="hiw-header invisible mb-20">
-          <p className="text-sm font-mono text-primary mb-3">// TECHNOLOGY</p>
+          <p className="text-sm font-mono text-primary mb-3">// MÉTODO</p>
           <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
-            <span className="text-balance">Three steps to</span>
+            <span className="text-balance">Três fases.</span>
             <br />
-            <span className="text-balance">production.</span>
+            <span className="text-balance">Um produto no ar.</span>
           </h2>
         </div>
 
@@ -122,7 +192,9 @@ export function HowItWorksSection() {
                 <div className="flex items-start gap-4">
                   <span
                     className={`font-mono text-sm transition-colors ${
-                      activeStep === index ? "text-primary" : "text-muted-foreground"
+                      activeStep === index
+                        ? "text-primary"
+                        : "text-muted-foreground"
                     }`}
                   >
                     {step.number}
@@ -131,7 +203,9 @@ export function HowItWorksSection() {
                     <h3 className="text-lg font-semibold mb-1">{step.title}</h3>
                     <p
                       className={`text-sm leading-relaxed transition-colors ${
-                        activeStep === index ? "text-muted-foreground" : "text-muted-foreground/60"
+                        activeStep === index
+                          ? "text-muted-foreground"
+                          : "text-muted-foreground/60"
                       }`}
                     >
                       {step.description}
@@ -154,48 +228,13 @@ export function HowItWorksSection() {
             ))}
           </div>
 
-          {/* Code display */}
-          <div className="hiw-code invisible lg:sticky lg:top-32">
-            <div className="rounded-xl overflow-hidden bg-card border border-border card-shadow">
-              {/* Window chrome */}
-              <div className="px-4 py-3 border-b border-border flex items-center gap-3 bg-secondary/30">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-muted-foreground/20" />
-                  <div className="w-3 h-3 rounded-full bg-muted-foreground/20" />
-                  <div className="w-3 h-3 rounded-full bg-muted-foreground/20" />
-                </div>
-                <span className="text-xs font-mono text-muted-foreground">workflow.ts</span>
-              </div>
-
-              {/* Code content */}
-              <div className="p-6 font-mono text-sm min-h-[200px]">
-                <pre className="text-muted-foreground">
-                  {steps[activeStep].code.split("\n").map((line, i) => (
-                    <div
-                      key={`${activeStep}-${i}`}
-                      className="leading-relaxed animate-in fade-in slide-in-from-left-2"
-                      style={{ animationDelay: `${i * 50}ms` }}
-                    >
-                      <span className="text-muted-foreground/40 select-none w-6 inline-block">
-                        {i + 1}
-                      </span>
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: highlightCode(line),
-                        }}
-                      />
-                    </div>
-                  ))}
-                </pre>
-              </div>
-
-              {/* Output */}
-              <div className="border-t border-border p-4 bg-secondary/20 font-mono text-xs">
-                <div className="flex items-center gap-2 text-green-500">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  Ready
-                </div>
-              </div>
+          {/* Radial Orbital Timeline */}
+          <div className="hiw-orbital invisible lg:sticky lg:top-32">
+            <div className="relative w-full aspect-square max-w-[500px] mx-auto">
+              <RadialOrbitalTimeline
+                timelineData={timelineNodes}
+                highlightedGroup={stepToNodes[activeStep]}
+              />
             </div>
           </div>
         </div>
@@ -213,13 +252,4 @@ export function HowItWorksSection() {
       `}</style>
     </section>
   );
-}
-
-function highlightCode(line: string): string {
-  return line
-    .replace(/(nexus|process|env)/g, '<span class="text-foreground">$1</span>')
-    .replace(/(\.\w+)/g, '<span class="text-primary">$1</span>')
-    .replace(/('.*?'|".*?")/g, '<span class="text-green-400">$1</span>')
-    .replace(/(\/\/.*$)/g, '<span class="text-muted-foreground/50">$1</span>')
-    .replace(/(\{|\}|\(|\)|\[|\]|:)/g, '<span class="text-muted-foreground/70">$1</span>');
 }

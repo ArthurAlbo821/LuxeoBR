@@ -77,7 +77,12 @@ export function HeroSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-24">
         {/* Badge */}
-        <div className="hero-badge invisible flex justify-center mb-10"></div>
+        <div className="hero-badge invisible flex justify-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-secondary/30 backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-xs font-mono text-muted-foreground tracking-wider">venture studio · product engineering</span>
+          </div>
+        </div>
 
         {/* Headline */}
         <div className="text-center max-w-5xl mx-auto mb-10">
@@ -85,15 +90,14 @@ export function HeroSection() {
             className="hero-headline invisible text-5xl md:text-7xl font-semibold tracking-tight leading-[0.95] mb-8 lg:text-7xl"
             style={{ fontFamily: "var(--font-geist-pixel-line), monospace" }}
           >
-            <span className="text-balance">The complete platform to</span>
+            <span className="text-balance">Da ideia ao produto.</span>
             <br />
-            <span className="text-balance">build the</span>{" "}
-            <span className="text-primary">future.</span>
+            <span className="text-primary">Rápido.</span>
           </h1>
 
           <p className="hero-subtitle invisible text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Your toolkit to stop configuring and start innovating. Securely
-            build, deploy, and scale AI-powered applications.
+            Somos um venture studio que constrói, lança e opera produtos digitais.
+            Engenharia de produto com velocidade de startup e precisão de estúdio.
           </p>
         </div>
 
@@ -103,7 +107,7 @@ export function HeroSection() {
             size="lg"
             className="bg-foreground hover:bg-foreground/90 text-background px-6 h-11 text-sm font-medium group"
           >
-            Get a demo
+            Agendar uma call
             <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5" />
           </Button>
           <Button
@@ -111,36 +115,20 @@ export function HeroSection() {
             variant="outline"
             className="h-11 px-6 text-sm font-medium border-border hover:bg-secondary/50 bg-transparent"
           >
-            Explore the Product
+            <a href="#studio">Conheça o Studio</a>
           </Button>
         </div>
 
-        {/* Stats with company logos style */}
+        {/* Stats with positioning cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-xl overflow-hidden card-shadow">
           {[
-            {
-              value: "20 days",
-              label: "saved on daily builds.",
-              company: "STRIPE",
-            },
-            {
-              value: "98%",
-              label: "faster time to market.",
-              company: "VERCEL",
-            },
-            {
-              value: "300%",
-              label: "increase in throughput.",
-              company: "LINEAR",
-            },
-            {
-              value: "6x",
-              label: "faster to build + deploy.",
-              company: "NOTION",
-            },
+            { value: "< 12 sem", label: "do conceito ao MVP.", tag: "VELOCIDADE" },
+            { value: "SP + GVA", label: "engenharia global.", tag: "PRESENÇA" },
+            { value: "SaaS B2B", label: "foco em produtos que escalam.", tag: "FOCO" },
+            { value: "AI/Data", label: "tecnologia de ponta integrada.", tag: "STACK" },
           ].map((stat) => (
             <div
-              key={stat.company}
+              key={stat.tag}
               className="hero-stat invisible p-6 lg:p-8 flex justify-between min-h-[140px] bg-black shadow-none lg:py-8 flex-col"
             >
               <div>
@@ -153,7 +141,7 @@ export function HeroSection() {
                 </span>
               </div>
               <div className="font-mono text-xs text-muted-foreground/60 tracking-widest mt-4">
-                {stat.company}
+                {stat.tag}
               </div>
             </div>
           ))}

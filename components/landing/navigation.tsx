@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "Platform", href: "#features" },
-  { name: "Technology", href: "#how-it-works" },
-  { name: "Metrics", href: "#metrics" },
-  { name: "Developers", href: "#developers" },
+  { name: "Studio", href: "#studio" },
+  { name: "Método", href: "#metodo" },
+  { name: "Stack", href: "#stack" },
+  { name: "Contato", href: "#contato" },
 ];
 
 export function Navigation() {
@@ -38,11 +38,11 @@ export function Navigation() {
             <div className="relative w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20" />
               <span className="font-mono text-primary font-bold text-lg relative z-10">
-                N
+                L
               </span>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/10" />
             </div>
-            <span className="text-xl font-bold tracking-tight">Nexus</span>
+            <span className="text-xl font-bold tracking-tight">Luxeo Labs</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -60,14 +60,14 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="text-muted-foreground pointer-events-none">
-              Sign in
-            </Button>
+            <span className="text-xs font-mono text-muted-foreground/60 tracking-wider border border-border/50 rounded-full px-3 py-1.5">
+              PT | FR
+            </span>
             <Button
               size="sm"
               className="bg-foreground hover:bg-foreground/90 text-background"
             >
-              Get Started
+              Agendar uma call
             </Button>
           </div>
 
@@ -103,11 +103,11 @@ export function Navigation() {
               </a>
             ))}
             <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/50">
-              <Button variant="ghost" className="justify-start text-muted-foreground pointer-events-none">
-                Sign in
-              </Button>
+              <span className="text-xs font-mono text-muted-foreground/60 tracking-wider px-4 py-2">
+                PT | FR
+              </span>
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                Get Started
+                Agendar uma call
               </Button>
             </div>
           </div>
