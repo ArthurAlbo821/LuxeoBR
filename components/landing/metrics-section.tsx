@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { AsciiWave } from "./ascii-wave";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -87,10 +86,8 @@ export function MetricsSection() {
 
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* ASCII Wave Background */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-        <AsciiWave className="w-full h-full object-cover" />
-      </div>
+      {/* Subtle gradient background */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--primary)_0%,_transparent_70%)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}

@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 export function AsciiWave({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef);
+  const isInViewRef = useRef(false);
+
+  useEffect(() => {
+    isInViewRef.current = isInView;
+  }, [isInView]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,14 +22,22 @@ export function AsciiWave({ className = "" }: { className?: string }) {
 
     let animationId: number;
     let time = 0;
+    let running = false;
 
     const chars = "█▓▒░ ";
     const width = 120;
     const height = 40;
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = width * 8;
+    canvas.height = height * 12;
 
+    const animate = () => {
+      if (!isInViewRef.current) {
+        running = false;
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.font = "12px JetBrains Mono, monospace";
 
       for (let y = 0; y < height; y++) {
@@ -29,13 +45,13 @@ export function AsciiWave({ className = "" }: { className?: string }) {
           const wave1 = Math.sin((x * 0.08) + time) * Math.cos((y * 0.12) + time * 0.5);
           const wave2 = Math.sin((x * 0.05) - time * 0.7) * Math.sin((y * 0.08) + time * 0.3);
           const wave3 = Math.cos((x * 0.03) + (y * 0.03) + time * 0.4);
-          
+
           const combined = (wave1 + wave2 + wave3) / 3;
           const normalized = (combined + 1) / 2;
-          
+
           const charIndex = Math.floor(normalized * (chars.length - 1));
           const char = chars[charIndex];
-          
+
           if (char !== " ") {
             const hue = 170 + normalized * 30;
             const lightness = 0.5 + normalized * 0.3;
@@ -49,18 +65,34 @@ export function AsciiWave({ className = "" }: { className?: string }) {
       animationId = requestAnimationFrame(animate);
     };
 
-    canvas.width = width * 8;
-    canvas.height = height * 12;
-    animate();
+    // Start/resume when visible
+    const startLoop = () => {
+      if (!running && isInViewRef.current) {
+        running = true;
+        animationId = requestAnimationFrame(animate);
+      }
+    };
 
-    return () => cancelAnimationFrame(animationId);
+    startLoop();
+
+    // Watch for visibility changes
+    const interval = setInterval(() => {
+      if (isInViewRef.current && !running) startLoop();
+    }, 200);
+
+    return () => {
+      clearInterval(interval);
+      cancelAnimationFrame(animationId);
+    };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`${className}`}
-      style={{ imageRendering: "pixelated" }}
-    />
+    <div ref={containerRef} className={className}>
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full"
+        style={{ imageRendering: "pixelated" }}
+      />
+    </div>
   );
 }

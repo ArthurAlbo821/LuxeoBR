@@ -218,8 +218,7 @@ export function HowItWorksSection() {
                   <div className="mt-4 ml-8">
                     <div className="h-0.5 bg-border rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-primary rounded-full animate-[progress_4s_linear]"
-                        style={{ width: "100%" }}
+                        className="h-full bg-primary rounded-full origin-left animate-[progress_4s_linear]"
                       />
                     </div>
                   </div>
@@ -243,10 +242,10 @@ export function HowItWorksSection() {
       <style jsx>{`
         @keyframes progress {
           from {
-            width: 0%;
+            transform: scaleX(0);
           }
           to {
-            width: 100%;
+            transform: scaleX(1);
           }
         }
       `}</style>

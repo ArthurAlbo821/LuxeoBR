@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { AsciiCube } from "./ascii-cube";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -110,11 +109,6 @@ export function IntegrationsSection() {
 
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* ASCII Cube Background */}
-      <div className="absolute left-10 top-1/3 opacity-5 pointer-events-none hidden xl:block">
-        <AsciiCube className="w-[400px] h-[350px]" />
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="integrations-header invisible text-center max-w-3xl mx-auto mb-16">

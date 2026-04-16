@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { AsciiCube } from "./ascii-cube";
 import { AsciiSphere } from "./ascii-sphere";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -64,17 +63,6 @@ export function CtaSection() {
           "-=0.3"
         );
 
-      // Subtle parallax on the CTA card
-      gsap.to(".cta-card", {
-        y: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-        },
-      });
     },
     { scope: sectionRef }
   );
@@ -86,11 +74,6 @@ export function CtaSection() {
           {/* Background with grid */}
           <div className="absolute inset-0 bg-foreground" />
           <div className="absolute inset-0 grid-pattern opacity-10" />
-
-          {/* Cube animation as full background */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 overflow-hidden opacity-25">
-            <AsciiCube className="w-[600px] h-[500px]" />
-          </div>
 
           <div className="relative z-10 px-8 lg:px-16 py-16 bg-transparent lg:py-0.5">
             <div className="flex items-center justify-between gap-8">

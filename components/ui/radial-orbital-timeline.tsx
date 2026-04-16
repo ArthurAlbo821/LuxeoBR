@@ -117,12 +117,7 @@ export default function RadialOrbitalTimeline({
       <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center">
         {/* Center pulsing orb — does NOT rotate */}
         <div className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-primary via-primary/70 to-accent animate-pulse flex items-center justify-center z-10">
-          <div className="absolute w-16 h-16 rounded-full border border-primary/20 animate-ping opacity-70" />
-          <div
-            className="absolute w-20 h-20 rounded-full border border-primary/10 animate-ping opacity-50"
-            style={{ animationDelay: "0.5s" }}
-          />
-          <div className="w-6 h-6 rounded-full bg-primary/80 backdrop-blur-md" />
+          <div className="w-6 h-6 rounded-full bg-primary/80" />
         </div>
 
         {/* Orbit ring — does NOT rotate */}
@@ -223,7 +218,7 @@ export default function RadialOrbitalTimeline({
 
                   {/* Expanded card */}
                   {isExp && (
-                    <Card className="absolute top-16 left-1/2 -translate-x-1/2 w-56 bg-card/95 backdrop-blur-xl border-border shadow-xl shadow-primary/5 overflow-visible z-50">
+                    <Card className="absolute top-16 left-1/2 -translate-x-1/2 w-56 bg-card border-border shadow-xl shadow-primary/5 overflow-visible z-50">
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-border" />
                       <CardHeader className="pb-2 p-4">
                         <div className="flex justify-between items-center">

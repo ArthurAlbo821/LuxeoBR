@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 export function AsciiTorus({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef);
+  const isInViewRef = useRef(false);
+
+  useEffect(() => {
+    isInViewRef.current = isInView;
+  }, [isInView]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -15,6 +23,7 @@ export function AsciiTorus({ className = "" }: { className?: string }) {
     let animationId: number;
     let A = 0;
     let B = 0;
+    let running = false;
 
     const width = 80;
     const height = 50;
@@ -25,7 +34,15 @@ export function AsciiTorus({ className = "" }: { className?: string }) {
     const K2 = 5;
     const K1 = width * K2 * 3 / (8 * (R1 + R2));
 
+    canvas.width = width * 10;
+    canvas.height = height * 14;
+
     const animate = () => {
+      if (!isInViewRef.current) {
+        running = false;
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const output: string[][] = Array(height).fill(null).map(() => Array(width).fill(" "));
@@ -85,18 +102,32 @@ export function AsciiTorus({ className = "" }: { className?: string }) {
       animationId = requestAnimationFrame(animate);
     };
 
-    canvas.width = width * 10;
-    canvas.height = height * 14;
-    animate();
+    const startLoop = () => {
+      if (!running && isInViewRef.current) {
+        running = true;
+        animationId = requestAnimationFrame(animate);
+      }
+    };
 
-    return () => cancelAnimationFrame(animationId);
+    startLoop();
+
+    const interval = setInterval(() => {
+      if (isInViewRef.current && !running) startLoop();
+    }, 200);
+
+    return () => {
+      clearInterval(interval);
+      cancelAnimationFrame(animationId);
+    };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`${className}`}
-      style={{ imageRendering: "pixelated" }}
-    />
+    <div ref={containerRef} className={className}>
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full"
+        style={{ imageRendering: "pixelated" }}
+      />
+    </div>
   );
 }

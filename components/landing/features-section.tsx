@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { AsciiCube } from "./ascii-cube";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -31,17 +30,6 @@ const asciiAnimations = {
         │C│
         └─┘`;
   },
-  security: (frame: number) => {
-    const lock = ["◈", "◇", "◆", "◇"];
-    const bars = ["░", "▒", "▓", "▒"];
-    const l = lock[frame % lock.length];
-    const b = bars[frame % bars.length];
-    return `   ╔═══╗
-   ║ ${l} ║
-  ┌╨───╨┐
-  │${b}${b}${b}${b}${b}│
-  └─────┘`;
-  },
   analytics: (frame: number) => {
     const heights = [
       [1, 2, 3, 2],
@@ -59,46 +47,6 @@ const asciiAnimations = {
   │${bar(h[0])} ${bar(h[1])} ${bar(h[2])} ${bar(h[3])}
   │█ █ █ █
   └────────`;
-  },
-  globe: (frame: number) => {
-    const rotations = [
-      `    .--.
-   /    \\
-  | (  ) |
-   \\    /
-    '--'`,
-      `    .--.
-   /    \\
-  |  () |
-   \\    /
-    '--'`,
-      `    .--.
-   /    \\
-  |  (  )|
-   \\    /
-    '--'`,
-      `    .--.
-   /    \\
-  | ()  |
-   \\    /
-    '--'`,
-    ];
-    return rotations[frame % rotations.length];
-  },
-  api: (frame: number) => {
-    const methods = ["GET", "POST", "PUT", "GET"];
-    const arrows = [
-      "────────►",
-      "═══════►",
-      "━━━━━━━►",
-      "────────►",
-    ];
-    const m = methods[frame % methods.length];
-    const a = arrows[frame % arrows.length];
-    return `  ${m} /api
-  ${a}
-  ◄────────
-  { data }`;
   },
 };
 
@@ -118,41 +66,27 @@ const features = [
     description: "Infraestrutura, monitoramento e otimização. Operamos os produtos que construímos com ownership real.",
     animationKey: "analytics" as const,
   },
-  {
-    title: "Estruturação de Times",
-    description: "Montamos squads dedicados com a combinação certa de skills para cada produto. Recrutamento, cultura e processos.",
-    animationKey: "globe" as const,
-  },
-  {
-    title: "AI & Data",
-    description: "Inteligência artificial e dados integrados desde o dia zero. Não como feature, mas como fundação.",
-    animationKey: "security" as const,
-  },
-  {
-    title: "Product Engineering Externo",
-    description: "Para clientes selecionados, aplicamos o mesmo rigor dos nossos produtos internos nos seus projetos.",
-    animationKey: "api" as const,
-  },
 ];
 
 function AnimatedAscii({ animationKey }: { animationKey: keyof typeof asciiAnimations }) {
-  const [frame, setFrame] = useState(0);
+  const preRef = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
+    let frame = 0;
+    if (preRef.current) {
+      preRef.current.textContent = asciiAnimations[animationKey](frame);
+    }
     const interval = setInterval(() => {
-      setFrame((f) => f + 1);
+      frame++;
+      if (preRef.current) {
+        preRef.current.textContent = asciiAnimations[animationKey](frame);
+      }
     }, 400);
     return () => clearInterval(interval);
-  }, []);
-
-  const getAscii = useCallback(() => {
-    return asciiAnimations[animationKey](frame);
-  }, [animationKey, frame]);
+  }, [animationKey]);
 
   return (
-    <pre className="font-mono text-xs text-primary leading-tight whitespace-pre">
-      {getAscii()}
-    </pre>
+    <pre ref={preRef} className="font-mono text-xs text-primary leading-tight whitespace-pre" />
   );
 }
 
@@ -227,25 +161,18 @@ export function FeaturesSection() {
       className="relative py-32 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header with ASCII cube */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-          <div>
-            <p className="text-sm font-mono text-primary mb-3">// STUDIO</p>
-            <h2 className="features-header-title invisible text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
-              <span className="text-balance">Tudo que você precisa</span>
-              <br />
-              <span className="text-balance">para lançar um produto.</span>
-            </h2>
-            <p className="features-header-desc invisible text-lg text-muted-foreground leading-relaxed max-w-lg">
-              Do conceito à operação. Combinamos estratégia de produto, engenharia de software
-              e operação para transformar ideias em negócios reais.
-            </p>
-          </div>
-
-          {/* ASCII Cube visualization */}
-          <div className="flex justify-center lg:justify-end">
-            <AsciiCube className="w-[480px] h-[640px]" />
-          </div>
+        {/* Header */}
+        <div className="mb-20">
+          <p className="text-sm font-mono text-primary mb-3">// STUDIO</p>
+          <h2 className="features-header-title invisible text-3xl lg:text-5xl font-semibold tracking-tight mb-6">
+            <span className="text-balance">Tudo que você precisa</span>
+            <br />
+            <span className="text-balance">para lançar um produto.</span>
+          </h2>
+          <p className="features-header-desc invisible text-lg text-muted-foreground leading-relaxed max-w-lg">
+            Do conceito à operação. Combinamos estratégia de produto, engenharia de software
+            e operação para transformar ideias em negócios reais.
+          </p>
         </div>
 
         {/* Features Grid */}

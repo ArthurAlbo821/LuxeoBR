@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Globe } from "@/components/ui/cobe-globe";
+import { useInView } from "@/hooks/use-in-view";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -42,6 +43,7 @@ const features = [
 
 export function GlobeSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const isGlobeVisible = useInView(sectionRef);
 
   useGSAP(
     () => {
@@ -99,17 +101,6 @@ export function GlobeSection() {
         },
       });
 
-      // Parallax on globe on scroll
-      gsap.to(".globe-visual", {
-        y: -40,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
-        },
-      });
     },
     { scope: sectionRef }
   );
@@ -204,6 +195,8 @@ export function GlobeSection() {
             markerSize={0.03}
             markerElevation={0.015}
             speed={0.002}
+            mapSamples={4000}
+            isVisible={isGlobeVisible}
             className="w-full"
           />
         </div>

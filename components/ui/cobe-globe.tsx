@@ -34,6 +34,7 @@ interface GlobeProps {
   theta?: number
   diffuse?: number
   mapSamples?: number
+  isVisible?: boolean
 }
 
 export function Globe({
@@ -54,6 +55,7 @@ export function Globe({
   theta = 0.2,
   diffuse = 1.5,
   mapSamples = 16000,
+  isVisible = true,
 }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<{ x: number; y: number } | null>(null)
@@ -63,6 +65,11 @@ export function Globe({
   const phiOffsetRef = useRef(0)
   const thetaOffsetRef = useRef(0)
   const isPausedRef = useRef(false)
+  const isVisibleRef = useRef(isVisible)
+
+  useEffect(() => {
+    isVisibleRef.current = isVisible
+  }, [isVisible])
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -162,6 +169,10 @@ export function Globe({
       })
 
       function animate() {
+        if (!isVisibleRef.current) {
+          animationId = requestAnimationFrame(animate)
+          return
+        }
         if (!isPausedRef.current) {
           time += speed
           if (
